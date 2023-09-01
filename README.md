@@ -1,6 +1,4 @@
-Build image
-New PR
-# zkevm-contracts
+run workflow
 
 Smart contract implementation which will be used by the polygon-hermez zkevm
 
