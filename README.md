@@ -1,6 +1,4 @@
-run workflow
-
-run test
+build image
 
 Smart contract implementation which will be used by the polygon-hermez zkevm
 
