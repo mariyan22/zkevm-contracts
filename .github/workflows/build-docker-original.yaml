@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          npm-version: 7.x
+          
       - name: Set int-bot SSH key
         run: |
           touch /tmp/ssh-key
@@ -36,6 +36,12 @@ jobs:
           ssh-add /tmp/ssh-key
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install npm 7.x
+        run: |
+          npm install -g npm@7
+          npm --version  # Verify npm version
+          
       - name: setup
         run: |
           eval "$(ssh-agent -s)"
