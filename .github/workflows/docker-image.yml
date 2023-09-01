@@ -17,10 +17,34 @@ jobs:
       github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:TriggerBuild')
 
     steps:
-    
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Set int-bot SSH key
+      run: |
+        touch /tmp/ssh-key
+        echo "${{ secrets.INT_BOT_SSH_KEY }}" > /tmp/ssh-key
+        chmod 400 /tmp/ssh-key
+        eval "$(ssh-agent -s)"
+        ssh-add /tmp/ssh-key
+        
     - name: Checkout code  
       uses: actions/checkout@v3
-      
+
+    - name: setup
+      run: |
+        eval "$(ssh-agent -s)"
+        ssh-add /tmp/ssh-key
+        npm install -g npm@latest
+        npm i
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+
+    - name: Build docker
+      run: npm run docker:contracts
+        
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
