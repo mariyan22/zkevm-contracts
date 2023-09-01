@@ -30,6 +30,8 @@ jobs:
         run: |
           touch /tmp/ssh-key
           echo "${{ secrets.INT_BOT_SSH_KEY }}" > /tmp/ssh-key
+          chmod 400 /tmp/ssh-key
+          eval "$(ssh-agent -s)"
       - name: Checkout code
         uses: actions/checkout@v2
       - name: setup
