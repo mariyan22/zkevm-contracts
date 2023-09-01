@@ -23,9 +23,10 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          npm-version: 7.x
       - name: Set int-bot SSH key
         run: |
           touch /tmp/ssh-key
