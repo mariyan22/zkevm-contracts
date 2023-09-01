@@ -1,4 +1,4 @@
-name: build and upload image
+name: build and upload image test
 
 on:
   pull_request:
