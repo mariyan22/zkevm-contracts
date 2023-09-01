@@ -25,9 +25,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Set int-bot SSH key
         run: |
-          touch /tmp/ssh-key
-          echo "${{ secrets.INT_BOT_SSH_KEY }}" > /tmp/ssh-key
-          chmod 400 /tmp/ssh-key
+          touch ${{ runner.workspace }}/ssh-keys/ssh-key
+          echo "${{ secrets.INT_BOT_SSH_KEY }}" > ${{ runner.workspace }}/ssh-keys/ssh-key
+          chmod 400 ${{ runner.workspace }}/ssh-keys/ssh-key
           eval "$(ssh-agent -s)"
           ssh-add /tmp/ssh-key
       - name: Checkout code
@@ -35,7 +35,7 @@ jobs:
       - name: setup
         run: |
           eval "$(ssh-agent -s)"
-          ssh-add /tmp/ssh-key
+          ssh-add ${{ runner.workspace }}/ssh-keys/ssh-key
           npm install -g npm@latest
           npm i
           sudo curl -L "https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
