@@ -18,7 +18,7 @@ jobs:
         node-version: [14.x]
 
     if: >
-      github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:TriggerBuild')
+      github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'Paused')
       
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
