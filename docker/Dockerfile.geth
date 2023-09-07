@@ -1,8 +1,34 @@
-FROM 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest
+# Start with the go-ethereum image
+FROM 104047360514.dkr.ecr.eu-central-1.amazonaws.com/go-ethereum:latest as base
 
+# Use a Node.js base image to install Node.js tools
+FROM node:14 as builder
+
+WORKDIR /app
+
+# Copy package.json and package-lock.json first to leverage Docker caching
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the project
+COPY . .
+
+# Now, combine the two stages
+FROM base
+
+# Copy the Node.js tools from the builder stage
+COPY --from=builder /app /app
+
+WORKDIR /app
+
+# Expose the necessary port for geth
 EXPOSE 8545
 
+# Copy Geth data
 COPY docker/gethData /
 
+# Set the entrypoint to Geth but provide a script to run contract deployment as CMD
 ENTRYPOINT ["geth"]
-CMD ["--rpc.allow-unprotected-txs", "--http", "--http.addr", "0.0.0.0","--http.corsdomain", "*", "--http.vhosts" ,"*", "--ws", "--ws.origins", "*", "--ws.addr", "0.0.0.0", "--dev", "--datadir", "/geth_data"]
+CMD ["--dev", "&&", "npx", "truffle", "migrate"]  # You might adjust this command based on your setup
