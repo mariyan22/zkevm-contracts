@@ -31,4 +31,5 @@ COPY docker/gethData /
 
 # Set the entrypoint to Geth but provide a script to run contract deployment as CMD
 ENTRYPOINT ["geth"]
-CMD ["/bin/sh", "-c", "geth --dev && npx truffle migrate"]  # You might adjust this command based on your setup
+CMD ["/bin/sh", "-c", "geth --dev & npx hardhat run --network localhost scripts/your-deploy-script.js"]
+
